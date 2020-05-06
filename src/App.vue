@@ -1,28 +1,40 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="training container">
+    <h1>Math training</h1>
+    <hr>
+    <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
+    <!-- Можно выводить компоненты самостоятельным или двойным тэгом
+        <app-message/> 
+        <app-message></app-message> -->
+        <app-start-screen v-if="state == 'start'" @onStart="onStart"/>
+        <app-question v-else-if="state == 'question'"/> 
+        <app-message v-else-if="state == 'message'"/>        
+        <app-result-screen v-else-if="state == 'screen'"/> 
+        
+        <div v-else>Unknown state</div>
+
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  data () {
+    return {
+      state: 'start'
+    }
+  },
+  methods: {
+    onStart(){
+      this.state = 'question'
+    }
   }
+
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+<style scoped>
+.training{
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
