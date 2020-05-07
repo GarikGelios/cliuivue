@@ -5,17 +5,12 @@
     <hr class="my-4" />
     <p>Choose the appropriate option</p>
     <div class="d-flex justify-content-around">
-      <!-- <button
-        type="button"
-        v-bind:key="number"
-        class="btn btn-light"
-        v-for="number in answer"
-      >{{ number }}</button>-->
       <button
         type="button"
         class="btn btn-light"
         v-bind:key="number"
         v-for="number in answer"
+        @click="onAnswer(number)"
       >{{ number }}</button>
     </div>
   </div>
@@ -23,19 +18,22 @@
 
 <script>
 export default {
+  props:['settings'],
   data() {
     return {
-      x: mtRandom(100, 200),
-      y: mtRandom(100, 200)
+      x: mtRandom(this.settings.from, this.settings.to),
+      y: mtRandom(this.settings.from, this.settings.to)
     };
   },
   computed: {
+    good(){
+      return this.x + this.y
+    },
     answer() {
-      const good = this.x + this.y;
-      let res = [good];
+      let res = [this.good];
 
-      while (res.length < 4) {
-        const num = mtRandom(good + 20, good - 20);
+      while (res.length < this.settings.variants) {
+        let num = mtRandom(this.good + this.settings.range, this.good - this.settings.range);
 
         if (res.indexOf(num) === -1) {
         // if (!res.includes(num)) {
@@ -46,6 +44,17 @@ export default {
       return res.sort(function() {
         return Math.random() > 0.5;
       });
+    }
+  },
+  methods: {
+    onAnswer(num){
+      if(num == this.good){
+        this.$emit('succes')
+      }
+      else {
+        this.$emit('error', `${this.x} + ${this.y} = ${this.good}`)
+      }
+
     }
   }
 };
